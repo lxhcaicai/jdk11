@@ -235,4 +235,22 @@ public class OptionTest {
         s = optional.orElseThrow(); // java.util.NoSuchElementException: No value present
         System.out.println("s = " + s);
     }
+
+    /**
+     * JDK11
+     * 判断 Optional 容器中是否有元素，如果没有元素，返回 true；否则，返回 false，可以类比 JDK8 中的 isPresent() 方法。
+     * public boolean isEmpty() { }
+     */
+    @Test
+    public void test13() {
+        String str = "abc";
+        Optional<String> optional = Optional.ofNullable(str);
+        boolean empty = optional.isEmpty();
+        System.out.println("empty = " + empty); // empty = false
+
+        str = null;
+        optional = Optional.ofNullable(str);
+        empty = optional.isEmpty();
+        System.out.println("empty = " + empty); // empty = true
+    }
 }
