@@ -217,4 +217,22 @@ public class OptionTest {
         stream = optional.stream();
         System.out.println("stream.count() = " + stream.count());
     }
+
+    /**
+     * JDK10
+     * 如果 Optional 容器中有元素，则返回该元素；否则，将抛出 NoSuchElementException 异常。
+     * public T orElseThrow() {}
+     */
+    @Test
+    public void test12() {
+        String str = "abc";
+        Optional<String> optional = Optional.ofNullable(str);
+        String s = optional.orElseThrow();
+        System.out.println("s = " + s); // s = abc
+
+        str = null;
+        optional = Optional.ofNullable(str);
+        s = optional.orElseThrow(); // java.util.NoSuchElementException: No value present
+        System.out.println("s = " + s);
+    }
 }
