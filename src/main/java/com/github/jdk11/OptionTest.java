@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class OptionTest {
 
@@ -159,4 +160,61 @@ public class OptionTest {
         optional.ifPresent(System.out::println);
     }
 
+    /**
+     * JDK9 中的 Optional 的方法
+     *
+     * 如果 Optional 中的元素不为空，就执行参数 1 的功能；否则，执行参数 2 的功能
+     * public void ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction){}
+     *
+     */
+    @Test
+    public void test9() {
+        String str = "abc";
+        // Optional 容器中有元素
+        Optional<String> optional = Optional.ofNullable(str);
+        optional.ifPresentOrElse(System.out::println,()-> System.out.println("当前 Optional 中没有元素")); // abc
+
+        // Optional 容器中没有元素
+        str = null;
+        optional = Optional.ofNullable(str);
+        optional.ifPresentOrElse(System.out::println,()-> System.out.println("当前 Optional 中没有元素")); // 当前 Optional 中没有元素
+    }
+
+    /**
+     * JDK9
+     * 如果 Optional 中的元素不为空，则返回对应的 Optional ；否则，返回形参封装的 Optional ：
+     * public Optional<T> or(Supplier<? extends Optional<? extends T>> supplier) {}
+     */
+    @Test
+    public void test10() {
+        String str = "abc";
+        // Optional 容器中有元素
+        Optional<String> optional = Optional.ofNullable(str);
+        optional = optional.or(() -> Optional.of("当前 Optional 没有元素"));
+        optional.ifPresent(System.out::println); // abc
+
+        str = null;
+        optional = Optional.ofNullable(str);
+        optional = optional.or(() -> Optional.of("当前 Optional 没有元素"));
+        optional.ifPresent(System.out::println); // 当前 Optional 没有元素
+    }
+
+
+    /**
+     * JDK9
+     * 如果 Optional 中的元素不为空，则返回包含此元素的 Stream；否则，返回一个空的 Stream
+     * public Stream<T> stream(){}
+     */
+    @Test
+    public void test11() {
+        String str = "abc";
+        Optional<String> optional = Optional.ofNullable(str);
+        Stream<String> stream = optional.stream();
+        System.out.println("stream.count() = " + stream.count());
+
+        str = null;
+        optional = Optional.ofNullable(str);
+        stream = optional.stream();
+        System.out.println("stream.count() = " + stream.count());
+    }
 }
